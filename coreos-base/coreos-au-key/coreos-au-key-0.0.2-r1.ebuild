@@ -20,10 +20,5 @@ S="${WORKDIR}"
 
 src_install() {
 	insinto /usr/share/update_engine
-	if use official; then
-		newins "${FILESDIR}/official-v2.pub.pem" update-payload-key.pub.pem
-	else
-		newins "${FILESDIR}/developer-v1.key.pem" update-payload-key.key.pem
-		newins "${FILESDIR}/developer-v1.pub.pem" update-payload-key.pub.pem
-	fi
+	newins "${FILESDIR}/protonet.pub.pem" update-payload-key.pub.pem
 }
