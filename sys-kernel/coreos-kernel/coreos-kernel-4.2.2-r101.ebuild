@@ -1,0 +1,1 @@
+coreos-kernel-4.2.2-r1.ebuild
