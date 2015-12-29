@@ -4,12 +4,17 @@
 
 EAPI="5"
 
-AUTOTOOLS_AUTORECONF="1"
-EGIT_REPO_URI="https://github.com/zfsonlinux/${PN}.git"
-EGIT_COMMIT="e0ed96fa43e1d34751ef8a750a7816852b1d09b3"
-inherit git-r3
+if [[ ${PV} == "9999" ]] ; then
+	AUTOTOOLS_AUTORECONF="1"
+	EGIT_REPO_URI="https://github.com/zfsonlinux/${PN}.git"
+	inherit git-r3
+else
+	SRC_URI="https://github.com/zfsonlinux/zfs/releases/download/zfs-${PV}/${P}.tar.gz
+		https://dev.gentoo.org/~ryao/dist/${P}-patches-p0.tar.xz"
+	KEYWORDS="amd64 ~arm ~ppc ~ppc64"
+fi
 
-KEYWORDS="amd64"
+AUTOTOOLS_AUTORECONF="1"
 
 inherit flag-o-matic linux-info linux-mod autotools-utils
 
@@ -31,15 +36,15 @@ RDEPEND="${COMMON_DEPEND}
 
 AT_M4DIR="config"
 AUTOTOOLS_IN_SOURCE_BUILD="1"
-DOCS=( AUTHORS DISCLAIMER README.markdown )
+DOCS=( AUTHORS DISCLAIMER )
 
 pkg_setup() {
 	linux-info_pkg_setup
 	CONFIG_CHECK="
 		!DEBUG_LOCK_ALLOC
-		!GRKERNSEC_HIDESYM
-		MODULES
+		!GRKERNSEC_RANDSTRUCT
 		KALLSYMS
+		MODULES
 		!PAX_KERNEXEC_PLUGIN_METHOD_OR
 		ZLIB_DEFLATE
 		ZLIB_INFLATE
@@ -54,12 +59,23 @@ pkg_setup() {
 	kernel_is ge 2 6 32 || die "Linux 2.6.32 or newer required"
 
 	[ ${PV} != "9999" ] && \
-		{ kernel_is le 4 3 || die "Linux 4.3 is the latest supported version."; }
+		{ kernel_is le 4 4 || die "Linux 4.4 is the latest supported version."; }
 
 	check_extra_config
 }
 
 src_prepare() {
+	if [ ${PV} != "9999" ]
+	then
+		# Apply patch set
+		EPATCH_SUFFIX="patch" \
+		EPATCH_FORCE="yes" \
+		epatch "${WORKDIR}/${P}-patches"
+	fi
+
+	# configure script crossbuild workaround
+	epatch "${FILESDIR}/crossbuild.patch"
+
 	# Workaround for hard coded path
 	sed -i "s|/sbin/lsmod|/bin/lsmod|" "${S}/scripts/check.sh" || \
 		die "Cannot patch check.sh"

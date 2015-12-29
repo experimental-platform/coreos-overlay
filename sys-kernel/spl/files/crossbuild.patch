@@ -1,0 +1,43 @@
+commit e0ed96fa43e1d34751ef8a750a7816852b1d09b3
+Author: Kamil Domanski <kamil@domanski.co>
+Date:   Sat Dec 12 13:35:49 2015 +0100
+
+    Skip GPL-only symbols test when cross-compiling
+    
+    Signed-off-by: Kamil Domański <kamil@domanski.co>
+    Signed-off-by: Brian Behlendorf <behlendorf1@llnl.gov>
+    Closes zfsonlinux/spl#507
+    Closes zfsonlinux/zfs#4075
+
+diff --git a/config/spl-build.m4 b/config/spl-build.m4
+index daa9eb7..b9c04a9 100644
+--- a/config/spl-build.m4
++++ b/config/spl-build.m4
+@@ -673,16 +673,19 @@ AC_DEFUN([SPL_AC_TEST_MODULE],
+ 		fi
+ 	])
+ 
+-	AC_RUN_IFELSE([
+-		AC_LANG_PROGRAM([
+-			#include "$LINUX/include/linux/license.h"
++	AS_IF([test "x$cross_compiling" != xyes], [
++		AC_RUN_IFELSE([
++			AC_LANG_PROGRAM([
++				#include "$LINUX/include/linux/license.h"
++			], [
++				return !license_is_gpl_compatible(
++				    "$SPL_META_LICENSE");
++			])
++		], [
++			AC_DEFINE([SPL_IS_GPL_COMPATIBLE], [1],
++			    [Define to 1 if GPL-only symbols can be used])
+ 		], [
+-			return !license_is_gpl_compatible("$SPL_META_LICENSE");
+ 		])
+-	], [
+-		AC_DEFINE([SPL_IS_GPL_COMPATIBLE], [1],
+-		    [Define to 1 if GPL-only symbols can be used])
+-	], [
+ 	])
+ ])
+ 
