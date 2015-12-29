@@ -4,12 +4,18 @@
 
 EAPI="5"
 
-AUTOTOOLS_AUTORECONF="1"
-EGIT_REPO_URI="https://github.com/kdomanski/zfs.git"
-EGIT_BRANCH="crossbuild-no-gpl-symbols"
-inherit git-r3
+if [ ${PV} == "9999" ]; then
+	AUTOTOOLS_AUTORECONF="1"
+	EGIT_REPO_URI="https://github.com/zfsonlinux/zfs.git"
+	inherit git-r3
+else
+	SRC_URI="https://github.com/zfsonlinux/zfs/releases/download/zfs-${PV}/zfs-${PV}.tar.gz
+		https://dev.gentoo.org/~ryao/dist/zfs-${PV}-patches-p0.tar.xz"
+	S="${WORKDIR}/zfs-${PV}"
+	KEYWORDS="amd64 ~arm ~ppc ~ppc64"
+fi
 
-KEYWORDS="amd64"
+AUTOTOOLS_AUTORECONF="1"
 
 inherit flag-o-matic linux-info linux-mod toolchain-funcs autotools-utils
 
@@ -28,6 +34,7 @@ DEPEND="
 "
 
 RDEPEND="${DEPEND}
+	!<sys-kernel/spl-0.6.5.3-r1
 	!sys-fs/zfs-fuse
 "
 
@@ -43,7 +50,6 @@ pkg_setup() {
 		IOSCHED_NOOP
 		MODULES
 		!PAX_KERNEXEC_PLUGIN_METHOD_OR
-		!PAX_USERCOPY_SLABS
 		ZLIB_DEFLATE
 		ZLIB_INFLATE
 	"
@@ -63,12 +69,22 @@ pkg_setup() {
 	kernel_is ge 2 6 32 || die "Linux 2.6.32 or newer required"
 
 	[ ${PV} != "9999" ] && \
-		{ kernel_is le 4 3 || die "Linux 4.3 is the latest supported version."; }
+		{ kernel_is le 4 4 || die "Linux 4.4 is the latest supported version."; }
 
 	check_extra_config
 }
 
 src_prepare() {
+	if [ ${PV} != "9999" ]
+	then
+		# Apply patch set
+		EPATCH_SUFFIX="patch" \
+		EPATCH_FORCE="yes" \
+		epatch "${WORKDIR}/zfs-${PV}-patches"
+	fi
+
+	epatch "${FILESDIR}/crossbuild.patch"
+
 	# Remove GPLv2-licensed ZPIOS unless we are debugging
 	use debug || sed -e 's/^subdir-m += zpios$//' -i "${S}/module/Makefile.in"
 
