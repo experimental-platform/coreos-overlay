@@ -15,6 +15,8 @@ else
 	KEYWORDS="amd64 ~arm ~ppc ~ppc64"
 fi
 
+AUTOTOOLS_AUTORECONF="1"
+
 inherit autotools-utils bash-completion-r1 flag-o-matic linux-info python-r1 systemd toolchain-funcs udev
 
 DESCRIPTION="Userland utilities for ZFS Linux kernel module"
