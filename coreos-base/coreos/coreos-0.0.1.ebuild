@@ -170,4 +170,5 @@ RDEPEND="${RDEPEND}
 	dev-vcs/git
 	sys-fs/zfs
 	sys-fs/zfs-kmod
+	sys-fs/ntfs3g
 	"
