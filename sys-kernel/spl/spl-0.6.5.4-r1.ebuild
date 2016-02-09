@@ -10,11 +10,9 @@ if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3
 else
 	SRC_URI="https://github.com/zfsonlinux/zfs/releases/download/zfs-${PV}/${P}.tar.gz
-		https://dev.gentoo.org/~ryao/dist/${P}-patches-p0.tar.xz"
+		https://dev.gentoo.org/~ryao/dist/${P}-patches-p${PR#r}.tar.xz"
 	KEYWORDS="amd64 ~arm ~ppc ~ppc64"
 fi
-
-AUTOTOOLS_AUTORECONF="1"
 
 inherit flag-o-matic linux-info linux-mod autotools-utils
 
@@ -72,9 +70,6 @@ src_prepare() {
 		EPATCH_FORCE="yes" \
 		epatch "${WORKDIR}/${P}-patches"
 	fi
-
-	# configure script crossbuild workaround
-	epatch "${FILESDIR}/crossbuild.patch"
 
 	# Workaround for hard coded path
 	sed -i "s|/sbin/lsmod|/bin/lsmod|" "${S}/scripts/check.sh" || \
