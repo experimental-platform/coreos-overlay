@@ -168,4 +168,6 @@ RDEPEND="${RDEPEND}
 	net-misc/iputils
 	dev-vcs/git
 	sys-fs/ntfs3g
+	sys-fs/zfs
+	sys-fs/zfs-kmod
 	"
