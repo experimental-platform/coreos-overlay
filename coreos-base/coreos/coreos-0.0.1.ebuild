@@ -165,4 +165,6 @@ RDEPEND="${RDEPEND}
 	sys-process/lsof
 	sys-process/procps
 	sys-fs/ntfs3g
+	sys-fs/zfs
+	sys-fs/zfs-kmod
 	"
