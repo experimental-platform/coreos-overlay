@@ -1,0 +1,1 @@
+coreos-kernel-4.3.6.ebuild
