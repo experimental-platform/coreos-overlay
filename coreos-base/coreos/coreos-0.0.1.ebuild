@@ -164,4 +164,5 @@ RDEPEND="${RDEPEND}
 	sys-libs/timezone-data
 	sys-process/lsof
 	sys-process/procps
+	sys-fs/ntfs3g
 	"
