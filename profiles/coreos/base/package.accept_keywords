@@ -98,3 +98,6 @@ dev-util/checkbashisms
 # https://bugs.gentoo.org/show_bug.cgi?id=580606
 =app-misc/jq-1.5-r2 ~amd64 ~arm64
 
+sys-kernel/spl ~amd64
+sys-fs/zfs-kmod ~amd64
+sys-fs/zfs ~amd64
