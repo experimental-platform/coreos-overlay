@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_PROJECT="coreos/update_engine"
+CROS_WORKON_PROJECT="kdomanski/update_engine"
 CROS_WORKON_REPO="git://github.com"
 AUTOTOOLS_AUTORECONF=1
 # TODO: this can be disabled once -I.. is no longer used
@@ -11,7 +11,7 @@ AUTOTOOLS_IN_SOURCE_BUILD=1
 if [[ "${PV}" == 9999 ]]; then
 	KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 else
-	CROS_WORKON_COMMIT="c88492c39ec0ad81bb26ae6efde7b4fc46a9804a"
+	CROS_WORKON_COMMIT="e28d1972a2136f52007c05871eafecb0e93d1ba6"
 	KEYWORDS="amd64 arm arm64 x86"
 fi
 
