@@ -22,7 +22,7 @@ HOMEPAGE="http://zfsonlinux.org/"
 
 LICENSE="BSD-2 CDDL MIT"
 SLOT="0"
-IUSE="custom-cflags debug kernel-builtin +rootfs test-suite static-libs"
+IUSE="custom-cflags debug kernel-builtin rootfs test-suite static-libs"
 RESTRICT="test"
 
 COMMON_DEPEND="
@@ -31,7 +31,6 @@ COMMON_DEPEND="
 	virtual/awk
 "
 DEPEND="${COMMON_DEPEND}
-	virtual/pkgconfig
 "
 
 RDEPEND="${COMMON_DEPEND}

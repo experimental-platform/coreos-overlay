@@ -23,13 +23,9 @@ SLOT="0"
 IUSE="custom-cflags debug"
 RESTRICT="debug? ( strip ) test"
 
-COMMON_DEPEND="dev-lang/perl
-	virtual/awk"
+DEPEND=""
 
-DEPEND="${COMMON_DEPEND}"
-
-RDEPEND="${COMMON_DEPEND}
-	!sys-devel/spl"
+RDEPEND="!sys-devel/spl"
 
 AT_M4DIR="config"
 AUTOTOOLS_IN_SOURCE_BUILD="1"

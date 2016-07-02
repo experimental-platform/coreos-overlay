@@ -21,13 +21,11 @@ HOMEPAGE="http://zfsonlinux.org/"
 
 LICENSE="CDDL debug? ( GPL-2+ )"
 SLOT="0"
-IUSE="custom-cflags debug +rootfs"
+IUSE="custom-cflags debug rootfs"
 RESTRICT="debug? ( strip ) test"
 
 DEPEND="
 	=sys-kernel/spl-${PV}*
-	dev-lang/perl
-	virtual/awk
 "
 
 RDEPEND="${DEPEND}
